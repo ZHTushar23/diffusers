@@ -178,3 +178,5 @@ tags
 wandb
 data
 examples/real_reg
+real_reg
+saved-model

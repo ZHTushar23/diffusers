@@ -11,6 +11,7 @@
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
 export OUTPUT_DIR="saved-model"
 export INSTANCE_DIR="./data/cat"
+export rel=True
 
 python examples/custom_diffusion/train_custom_diffusion.py \
   --pretrained_model_name_or_path=$MODEL_NAME  \
@@ -24,6 +25,7 @@ python examples/custom_diffusion/train_custom_diffusion.py \
   --train_batch_size=2  \
   --learning_rate=1e-5  \
   --lr_warmup_steps=0 \
-  --max_train_steps=250 \
+  --max_train_steps=5 \
   --scale_lr --hflip  \
+  --no_safe_serialization\
   --modifier_token "<new1>" 

@@ -1,4 +1,47 @@
-Traceback (most recent call last):
-  File "/nfs/rs/psanjay/users/ztushar1/diffusers/examples/custom_diffusion/train_custom_diffusion.py", line 37, in <module>
-    from huggingface_hub.utils import insecure_hashlib
-ImportError: cannot import name 'insecure_hashlib' from 'huggingface_hub.utils' (/home/ztushar1/.conda/envs/custom/lib/python3.9/site-packages/huggingface_hub/utils/__init__.py)
+/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/accelerator.py:384: UserWarning: `log_with=tensorboard` was passed but no supported trackers are currently installed.
+  warnings.warn(f"`log_with={log_with}` was passed but no supported trackers are currently installed.")
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+11/28/2023 11:26:57 - INFO - __main__ - Distributed environment: NO
+Num processes: 1
+Process index: 0
+Local process index: 0
+Device: cuda
+
+Mixed precision type: no
+
+You are using a model of type clip_text_model to instantiate a model of type . This is not supported for all configurations of models and can yield errors.
+{'thresholding', 'timestep_spacing', 'prediction_type', 'sample_max_value', 'dynamic_thresholding_ratio', 'variance_type', 'clip_sample_range'} was not found in config. Values will be initialized to default values.
+{'force_upcast', 'norm_num_groups'} was not found in config. Values will be initialized to default values.
+{'class_embeddings_concat', 'use_linear_projection', 'only_cross_attention', 'transformer_layers_per_block', 'timestep_post_act', 'attention_type', 'conv_out_kernel', 'time_cond_proj_dim', 'mid_block_only_cross_attention', 'dual_cross_attention', 'cross_attention_norm', 'addition_embed_type_num_heads', 'reverse_transformer_layers_per_block', 'projection_class_embeddings_input_dim', 'resnet_time_scale_shift', 'time_embedding_act_fn', 'time_embedding_dim', 'num_attention_heads', 'encoder_hid_dim_type', 'upcast_attention', 'resnet_out_scale_factor', 'dropout', 'conv_in_kernel', 'encoder_hid_dim', 'time_embedding_type', 'resnet_skip_time_act', 'mid_block_type', 'class_embed_type', 'addition_embed_type', 'addition_time_embed_dim', 'num_class_embeds'} was not found in config. Values will be initialized to default values.
+11/28/2023 11:27:04 - INFO - __main__ - ***** Running training *****
+11/28/2023 11:27:04 - INFO - __main__ -   Num examples = 200
+11/28/2023 11:27:04 - INFO - __main__ -   Num batches each epoch = 100
+11/28/2023 11:27:04 - INFO - __main__ -   Num Epochs = 1
+11/28/2023 11:27:04 - INFO - __main__ -   Instantaneous batch size per device = 2
+11/28/2023 11:27:04 - INFO - __main__ -   Total train batch size (w. parallel, distributed & accumulation) = 2
+11/28/2023 11:27:04 - INFO - __main__ -   Gradient Accumulation steps = 1
+11/28/2023 11:27:04 - INFO - __main__ -   Total optimization steps = 5
+Steps:   0%|          | 0/5 [00:00<?, ?it/s]Steps:  20%|██        | 1/5 [00:02<00:11,  2.99s/it]Steps:  20%|██        | 1/5 [00:03<00:11,  2.99s/it, loss=0.527, lr=4e-5]Steps:  40%|████      | 2/5 [00:04<00:06,  2.05s/it, loss=0.527, lr=4e-5]Steps:  40%|████      | 2/5 [00:04<00:06,  2.05s/it, loss=1.33, lr=4e-5] Steps:  60%|██████    | 3/5 [00:05<00:03,  1.73s/it, loss=1.33, lr=4e-5]Steps:  60%|██████    | 3/5 [00:05<00:03,  1.73s/it, loss=0.52, lr=4e-5]Steps:  80%|████████  | 4/5 [00:07<00:01,  1.57s/it, loss=0.52, lr=4e-5]Steps:  80%|████████  | 4/5 [00:07<00:01,  1.57s/it, loss=0.061, lr=4e-5]Steps: 100%|██████████| 5/5 [00:08<00:00,  1.48s/it, loss=0.061, lr=4e-5]Steps: 100%|██████████| 5/5 [00:08<00:00,  1.48s/it, loss=0.341, lr=4e-5]Model weights saved in saved-model/pytorch_custom_diffusion_weights.bin
+11/28/2023 11:27:13 - INFO - __main__ - Saving embeddings
+{'image_encoder', 'requires_safety_checker'} was not found in config. Values will be initialized to default values.
+
+Loading pipeline components...:   0%|          | 0/7 [00:00<?, ?it/s][A`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["id2label"]` will be overriden.
+`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["bos_token_id"]` will be overriden.
+`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["eos_token_id"]` will be overriden.
+Loaded safety_checker as StableDiffusionSafetyChecker from `safety_checker` subfolder of CompVis/stable-diffusion-v1-4.
+
+Loading pipeline components...:  14%|█▍        | 1/7 [00:00<00:02,  2.60it/s][ALoaded feature_extractor as CLIPImageProcessor from `feature_extractor` subfolder of CompVis/stable-diffusion-v1-4.
+{'timestep_spacing', 'prediction_type'} was not found in config. Values will be initialized to default values.
+Loaded scheduler as PNDMScheduler from `scheduler` subfolder of CompVis/stable-diffusion-v1-4.
+Loaded text_encoder as CLIPTextModel from `text_encoder` subfolder of CompVis/stable-diffusion-v1-4.
+
+Loading pipeline components...:  57%|█████▋    | 4/7 [00:00<00:00,  9.82it/s][A{'force_upcast', 'norm_num_groups'} was not found in config. Values will be initialized to default values.
+Loaded vae as AutoencoderKL from `vae` subfolder of CompVis/stable-diffusion-v1-4.
+{'class_embeddings_concat', 'use_linear_projection', 'only_cross_attention', 'transformer_layers_per_block', 'timestep_post_act', 'attention_type', 'conv_out_kernel', 'time_cond_proj_dim', 'mid_block_only_cross_attention', 'dual_cross_attention', 'cross_attention_norm', 'addition_embed_type_num_heads', 'reverse_transformer_layers_per_block', 'projection_class_embeddings_input_dim', 'resnet_time_scale_shift', 'time_embedding_act_fn', 'time_embedding_dim', 'num_attention_heads', 'encoder_hid_dim_type', 'upcast_attention', 'resnet_out_scale_factor', 'dropout', 'conv_in_kernel', 'encoder_hid_dim', 'time_embedding_type', 'resnet_skip_time_act', 'mid_block_type', 'class_embed_type', 'addition_embed_type', 'addition_time_embed_dim', 'num_class_embeds'} was not found in config. Values will be initialized to default values.
+Loaded unet as UNet2DConditionModel from `unet` subfolder of CompVis/stable-diffusion-v1-4.
+
+Loading pipeline components...:  86%|████████▌ | 6/7 [00:00<00:00, 11.16it/s][ALoaded tokenizer as CLIPTokenizer from `tokenizer` subfolder of CompVis/stable-diffusion-v1-4.
+Loading pipeline components...: 100%|██████████| 7/7 [00:00<00:00, 10.14it/s]
+{'thresholding', 'solver_type', 'prediction_type', 'timestep_spacing', 'variance_type', 'solver_order', 'sample_max_value', 'use_karras_sigmas', 'use_lu_lambdas', 'dynamic_thresholding_ratio', 'lambda_min_clipped', 'euler_at_final', 'lower_order_final', 'algorithm_type'} was not found in config. Values will be initialized to default values.
+Loaded textual inversion embedding for <new1>.
+Steps: 100%|██████████| 5/5 [00:12<00:00,  2.55s/it, loss=0.341, lr=4e-5]

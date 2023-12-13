@@ -25,7 +25,7 @@ python examples/custom_diffusion/train_custom_diffusion.py \
   --train_batch_size=2  \
   --learning_rate=1e-5  \
   --lr_warmup_steps=0 \
-  --max_train_steps=5 \
+  --max_train_steps=250 \
   --scale_lr --hflip  \
   --no_safe_serialization\
   --modifier_token "<new1>" 

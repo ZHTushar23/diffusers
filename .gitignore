@@ -180,3 +180,7 @@ data
 examples/real_reg
 real_reg
 saved-model
+v1.err
+v1.out
+v1test.err
+v1test.out

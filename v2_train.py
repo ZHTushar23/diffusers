@@ -1,14 +1,15 @@
 #https://huggingface.co/docs/diffusers/v0.24.0/en/tutorials/basic_training#training-configuration
 
 # import libraries
-from v1_dataloader import NasaDataset
-from v1_utilities import *
+from v2_dataloader import NasaDataset,collate_fn
+from v2_config import *
 from torch.utils.data import Dataset, random_split, DataLoader
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
-from diffusers import UNet2DModel
-from v1_train_utils import train_loop
+# from diffusers import UNet2DModel, UNet2DConditionModel
+from diffusion_mini import DiffusionMini
+from v2_train_utils import train_loop
 import os
 local_rank = int(os.environ["LOCAL_RANK"])
 # 1. training configuraion
@@ -32,34 +33,12 @@ train_data, test_data = random_split(
     custom_dataset, [total_size - test_size, test_size], generator=split_generator
 )
 
-train_dataloader = DataLoader(train_data, batch_size=config.train_batch_size, shuffle=True)
+train_dataloader = DataLoader(train_data, batch_size=config.train_batch_size, shuffle=True,collate_fn = lambda examples: collate_fn(examples, True))
 test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
 
 
 # 3. Create a UNet2DModel
-model = UNet2DModel(
-    sample_size=config.image_size,  # the target image resolution
-    in_channels=1,  # the number of input channels, 3 for RGB images
-    out_channels=1,  # the number of output channels
-    layers_per_block=2,  # how many ResNet layers to use per UNet block
-    block_out_channels=(128, 128, 256, 256),  # the number of output channels for each UNet block
-    down_block_types=(
-        "DownBlock2D",  # a regular ResNet downsampling block
-        # "DownBlock2D",
-        # "DownBlock2D",
-        "DownBlock2D",
-        "AttnDownBlock2D",  # a ResNet downsampling block with spatial self-attention
-        "DownBlock2D",
-    ),
-    up_block_types=(
-        "UpBlock2D",  # a regular ResNet upsampling block
-        "AttnUpBlock2D",  # a ResNet upsampling block with spatial self-attention
-        "UpBlock2D",
-        # "UpBlock2D",
-        # "UpBlock2D",
-        "UpBlock2D",
-    ),
-)
+model = DiffusionMini(in_channels=1,interim_channels=32,out_channels=1)
 
 # # Check if the model initialization is okay.
 # sample_image = train_data[0]["cot"].unsqueeze(0)

@@ -1,14 +1,14 @@
 #https://huggingface.co/docs/diffusers/v0.24.0/en/tutorials/basic_training#training-configuration
 
 # import libraries
-from v1_dataloader import NasaDataset
-from v1_utilities import *
+from v3_dataloader import NasaDataset
+from v3_config import *
 from torch.utils.data import Dataset, random_split, DataLoader
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
 from diffusers import UNet2DModel
-from v1_train_utils import train_loop
+from v3_train_utils import train_loop
 import os
 local_rank = int(os.environ["LOCAL_RANK"])
 # 1. training configuraion

@@ -1,8 +1,9 @@
-import dm_pipeline
+import v3_pipeline
 import torch
 from v1_dataloader import NasaDataset 
 from torch.utils.data import random_split, DataLoader
 from diffusion2 import Diffusion
+import numpy as np
 DEVICE = "cpu"
 
 ALLOW_CUDA = True
@@ -49,7 +50,7 @@ sampler = "ddpm"
 num_inference_steps = 50
 seed = 42
 
-output_image = dm_pipeline.generate(
+output_image = v3_pipeline.generate(
     prompt=context,
     input_image=input_image,
     strength=strength,

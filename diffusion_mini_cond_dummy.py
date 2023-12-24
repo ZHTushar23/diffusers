@@ -32,7 +32,7 @@ class UNET(nn.Module):
             SwitchSequentialC(nn.Conv2d(in_channels, interim_channels, kernel_size=3, padding=1)),
             
             # (Batch_Size, interim_channels, height, width) -> # (Batch_Size, interim_channels, height, width) -> (Batch_Size, interim_channels, height, width)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels, interim_channels), UNET_AttentionBlock2(4, 8, 21*21), UNET_AttentionBlock(4, 8)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels, interim_channels), UNET_AttentionBlock(4, 8), UNET_AttentionBlock3(4, 8)),
             
             # (Batch_Size, interim_channels, height, width) -> # (Batch_Size, interim_channels, height, width) -> (Batch_Size, interim_channels, height, width)
             # SwitchSequentialC(UNET_ResidualBlock(interim_channels, interim_channels), UNET_AttentionBlock(8, 40)),
@@ -41,7 +41,7 @@ class UNET(nn.Module):
             SwitchSequentialC(nn.Conv2d(interim_channels, interim_channels, kernel_size=3, stride=2, padding=1)),
             
             # (Batch_Size, interim_channels, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels, interim_channels*2), UNET_AttentionBlock2(4, 16, 21*21), UNET_AttentionBlock(4, 16)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels, interim_channels*2),  UNET_AttentionBlock(4, 16),  UNET_AttentionBlock3(4, 16)),
             
             # (Batch_Size, interim_channels*2, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2)
             # SwitchSequentialC(UNET_ResidualBlock(interim_channels*2, interim_channels*2), UNET_AttentionBlock(4, 16)),
@@ -50,7 +50,7 @@ class UNET(nn.Module):
             SwitchSequentialC(nn.Conv2d(interim_channels*2, interim_channels*2, kernel_size=3, stride=2, padding=1)),
             
             # (Batch_Size, interim_channels*2, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels*2, interim_channels*4), UNET_AttentionBlock2(4, 32, 21*21), UNET_AttentionBlock(4, 32)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels*2, interim_channels*4),  UNET_AttentionBlock(4, 32), UNET_AttentionBlock3(4, 32)),
             
             # (Batch_Size, interim_channels*4, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4)
             # SwitchSequentialC(UNET_ResidualBlock(interim_channels*4, interim_channels*4), UNET_AttentionBlock(4, 32)),
@@ -87,28 +87,28 @@ class UNET(nn.Module):
             SwitchSequentialC(UNET_ResidualBlock(interim_channels*8, interim_channels*4), Upsample(interim_channels*4)),
             
             # (Batch_Size, interim_channels*8, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels*8, interim_channels*4), UNET_AttentionBlock2(4, 32, 21*21), UNET_AttentionBlock(4, 32)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels*8, interim_channels*4), UNET_AttentionBlock(4, 32), UNET_AttentionBlock3(4, 32)),
             
             # (Batch_Size, interim_channels*8, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4)
             # SwitchSequentialC(UNET_ResidualBlock(interim_channels*8, interim_channels*4), UNET_AttentionBlock(4, 32)),
             
             # (Batch_Size, interim_channels*6, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 4, Width / 4) -> (Batch_Size, interim_channels*4, Height / 2, Width / 2)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels*6, interim_channels*4), UNET_AttentionBlock2(4, 32, 21*21),UNET_AttentionBlock(4, 32), Upsample(interim_channels*4)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels*6, interim_channels*4), UNET_AttentionBlock(4, 32), UNET_AttentionBlock3(4, 32), Upsample(interim_channels*4)),
             
             # (Batch_Size, interim_channels*6, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels*6, interim_channels*2),UNET_AttentionBlock2(4, 16, 21*21), UNET_AttentionBlock(4, 16)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels*6, interim_channels*2), UNET_AttentionBlock3(4, 16), UNET_AttentionBlock(4, 16)),
             
             # (Batch_Size, interim_channels*4, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2)
             # SwitchSequentialC(UNET_ResidualBlock(interim_channels*4, interim_channels*2), UNET_AttentionBlock(8, 80)),
             
             # (Batch_Size, interim_channels*3, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height / 2, Width / 2) -> (Batch_Size, interim_channels*2, Height, Width)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels*3, interim_channels*2),UNET_AttentionBlock2(4, 16, 21*21), UNET_AttentionBlock(4, 16), Upsample(interim_channels*2)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels*3, interim_channels*2),UNET_AttentionBlock3(4, 16), UNET_AttentionBlock(4, 16), Upsample(interim_channels*2)),
             
             # (Batch_Size, interim_channels*3, Height, Width) -> (Batch_Size, interim_channels, Height, Width) -> (Batch_Size, interim_channels, Height, Width)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels*3, interim_channels), UNET_AttentionBlock2(4, 8, 21*21), UNET_AttentionBlock(4, 8)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels*3, interim_channels),  UNET_AttentionBlock3(4, 8),UNET_AttentionBlock(4, 8)),
             
             # (Batch_Size, interim_channels*2, Height, Width) -> (Batch_Size, interim_channels, Height, Width) -> (Batch_Size, interim_channels, Height, Width)
-            SwitchSequentialC(UNET_ResidualBlock(interim_channels*2, interim_channels), UNET_AttentionBlock2(4, 8, 21*21), UNET_AttentionBlock(4, 8)),
+            SwitchSequentialC(UNET_ResidualBlock(interim_channels*2, interim_channels),  UNET_AttentionBlock(4, 8)),
             
             # (Batch_Size, interim_channels*2, Height, Width) -> (Batch_Size, interim_channels, Height, Width) -> (Batch_Size, interim_channels, Height, Width)
             # SwitchSequentialC(UNET_ResidualBlock(interim_channels*2, interim_channels), UNET_AttentionBlock(4, 16)),
@@ -133,7 +133,7 @@ class UNET(nn.Module):
         return x
 
 
-class DiffusionMiniCond(nn.Module):
+class DiffusionMiniCondD(nn.Module):
     def __init__(self,in_channels,interim_channels,out_channels,time_dim=320):
         super().__init__()
         self.time_embedding = TimeEmbedding(time_dim)
@@ -164,10 +164,12 @@ if __name__=="__main__":
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device("cpu")  
     t = torch.rand((1,320), dtype=torch.float32, device=device)
     # time = time_embedding(t)
-    context = torch.rand((2,1, 2, 100),device=device)
-    x_cond = torch.rand((2,1, 72, 72),device=device)
-    x = torch.rand((2, 1, 72, 72),device=device)
-    model = DiffusionMiniCond(in_channels=1,interim_channels=32,out_channels=1).to(device)
+    context = torch.rand((1,1, 2, 100),device=device)
+    x_cond = torch.rand((1,512),device=device)
+    x = torch.rand((1, 1, 72, 72),device=device)
+    model = DiffusionMiniCondD(in_channels=1,interim_channels=32,out_channels=1).to(device)
+    # model = accelerator.prepare(model)
+    torch.save(model.state_dict(), "model.pth")
     # print(model)
     num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print("Number of parameters: {:,}".format(num_params))   

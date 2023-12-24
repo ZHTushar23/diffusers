@@ -7,7 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class TrainingConfig:
     image_size = 72  # the generated image resolution
-    train_batch_size = 16
+    train_batch_size = 8
     eval_batch_size = 10  # how many images to sample during evaluation
     num_epochs = 1
     gradient_accumulation_steps = 1

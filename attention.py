@@ -122,3 +122,10 @@ class CrossAttention(nn.Module):
 
         # (Batch_Size, Seq_Len_Q, Dim_Q)
         return output
+    
+if __name__=="__main__":
+    n_head=4
+    channels=8
+    d_context=21*21
+    attention_2 = CrossAttention(n_head, channels, d_context, in_proj_bias=False)
+    

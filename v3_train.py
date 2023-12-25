@@ -32,7 +32,7 @@ split_generator.manual_seed(13)  # You can choose any seed value
 
 # Define the sizes for train, validation, and test sets
 total_size = len(custom_dataset)
-test_size = int(0.8 * total_size)
+test_size = int(0.2 * total_size)
 # Use random_split to split the dataset
 train_data, test_data = random_split(
     custom_dataset, [total_size - test_size, test_size], generator=split_generator

@@ -73,6 +73,7 @@ def generate(
     # images = rescale(images, (-1, 1), (0, 2), clamp=True)
     # (Batch_Size, Channel, Height, Width) -> (Batch_Size, Height, Width, Channel)
     images = latents.permute(0, 2, 3, 1)
+    images = rescale(images,(-1, 1),(0, 2.1272))
     images = images.to("cpu").numpy()
     return images[0]
     

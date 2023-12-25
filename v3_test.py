@@ -9,7 +9,7 @@ import torchvision.transforms as T
 from diffusion_mini_cond_dummy import DiffusionMiniCondD
 from visualization import *
 from v3_config import TrainingConfig
-from v3_dataloader import NasaDataset
+from v3_dataloader import NasaDataset,rescale
 import v3_pipeline 
 from feature_extractor import get_features
 from visualization import *
@@ -59,6 +59,7 @@ for i in range(len(test_dataloader.dataset)):
     data = test_dataloader.dataset[i]
     # get the data
     target_image, input_image, context = data['reflectance'],data['cot'],data['angles']
+    break
 
 input_image = torch.unsqueeze(input_image,0)
 context = torch.unsqueeze(context,0)
@@ -72,7 +73,7 @@ cot_context = cot_context.squeeze()
 
 # ## SAMPLER
 sampler = "ddpm"
-num_inference_steps = 50
+num_inference_steps = 100
 seed = 42
 
 output_image = v3_pipeline.generate(
@@ -88,8 +89,16 @@ print(output_image.shape)
 # Combine the input image and the output image into a single image.
 np.save(config.output_dir+"/samples/rad066.npy",output_image)
 
+
+
+target_image = rescale(target_image,(-1, 1),(0, 2.1272))
+target_image = target_image.numpy()
+
 # # Plot COT
 p_num=100
 dir_name = config.output_dir
-fname = dir_name+"/full_profile_jet_norm_rad066_%01d.png"%(p_num)
-plot_cot2(cot=x,title="Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
+fname = dir_name+"/samples/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
+plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
+
+fname = dir_name+"/samples/full_profile_jet_norm_rad066_%01d.png"%(p_num)
+plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])

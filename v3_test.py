@@ -57,48 +57,49 @@ test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
 
 for i in range(len(test_dataloader.dataset)):
     data = test_dataloader.dataset[i]
+    p_num = np.int(test_dataloader.dataset.csv_file[i]['Profile'])
     # get the data
     target_image, input_image, context = data['reflectance'],data['cot'],data['angles']
-    break
+    # break
 
-input_image = torch.unsqueeze(input_image,0)
-context = torch.unsqueeze(context,0)
+    input_image = torch.unsqueeze(input_image,0)
+    context = torch.unsqueeze(context,0)
 
-input_image= input_image.to(dtype=torch.float32)
+    input_image= input_image.to(dtype=torch.float32)
 
-# get features using pretrained resnet18 model. 
-cot_context = get_features(input_image)
-del input_image
-cot_context = cot_context.squeeze()
+    # get features using pretrained resnet18 model. 
+    cot_context = get_features(input_image)
+    del input_image
+    cot_context = cot_context.squeeze()
 
-# ## SAMPLER
-sampler = "ddpm"
-num_inference_steps = 100
-seed = 42
+    # ## SAMPLER
+    sampler = "ddpm"
+    num_inference_steps = 100
+    seed = 42
 
-output_image = v3_pipeline.generate(
-    prompt=context,
-    input_image=cot_context,
-    sampler_name=sampler,
-    n_inference_steps=num_inference_steps,
-    seed=seed,
-    model=model,
-    device=DEVICE
-)
-print(output_image.shape)
-# Combine the input image and the output image into a single image.
-np.save(config.output_dir+"/samples/rad066.npy",output_image)
+    output_image = v3_pipeline.generate(
+        prompt=context,
+        input_image=cot_context,
+        sampler_name=sampler,
+        n_inference_steps=num_inference_steps,
+        seed=seed,
+        model=model,
+        device=DEVICE
+    )
+    print(output_image.shape)
+    # Combine the input image and the output image into a single image.
+    np.save(config.output_dir+"/samples/rad066.npy",output_image)
 
 
 
-target_image = rescale(target_image,(-1, 1),(0, 2.1272))
-target_image = target_image.numpy()
+    target_image = rescale(target_image,(-1, 1),(0, 2.1272))
+    target_image = target_image.numpy()
 
-# # Plot COT
-p_num=100
-dir_name = config.output_dir
-fname = dir_name+"/samples/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
-plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
+    # # Plot COT
+    # p_num=100
+    dir_name = config.output_dir
+    fname = dir_name+"/samples/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
+    plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-fname = dir_name+"/samples/full_profile_jet_norm_rad066_%01d.png"%(p_num)
-plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
+    fname = dir_name+"/samples/full_profile_jet_norm_rad066_%01d.png"%(p_num)
+    plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])

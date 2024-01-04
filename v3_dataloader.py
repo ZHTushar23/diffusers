@@ -143,7 +143,6 @@ class NasaDataset(Dataset):
         return sample
 
 
-
 if __name__=="__main__":
     # dataset_dir = "/nfs/rs/psanjay/users/ztushar1/COT_CER_Joint_Retrievals/one_thousand_profiles/Refl"
     dataset_dir = "/nfs/rs/psanjay/users/ztushar1/multi-view-cot-retrieval/LES102_MultiView_100m_F2/"

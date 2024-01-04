@@ -6,7 +6,8 @@ import os
 import torch.nn.functional as F
 import torch
 from diffusers import DDPMPipeline
-from feature_extractor import get_features
+# from feature_extractor import get_features
+from feature_extractor import get_features_e2d
 
 def train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler):
     # Initialize accelerator and tensorboard logging
@@ -45,7 +46,7 @@ def train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_s
             cot_data = cot_data.to(dtype=torch.float32)
 
             # get features using pretrained resnet18 model. 
-            cot_context = get_features(cot_data,accelerator.device)
+            cot_context = get_features_e2d(cot_data,accelerator.device)
             del cot_data
             cot_context = cot_context.squeeze()
             # print(cot_context.dtype)

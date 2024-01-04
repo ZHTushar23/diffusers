@@ -57,7 +57,7 @@ test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
 
 for i in range(len(test_dataloader.dataset)):
     data = test_dataloader.dataset[i]
-    p_num = np.int(test_dataloader.dataset.csv_file[i]['Profile'])
+    p_num =  i
     # get the data
     target_image, input_image, context = data['reflectance'],data['cot'],data['angles']
     # break

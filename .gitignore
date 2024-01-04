@@ -196,7 +196,9 @@ ddpm-butterflies-128
 ddpm-rad-72
 ddpm-cot-72
 ddpm-rad-72-cond
+ddpm-rad-72-cond_e2d
 ddpm-rad-72-cond2
 v1_ddpm.err
 v1_ddpm.err
 ddpm-cot-72
+model.pth

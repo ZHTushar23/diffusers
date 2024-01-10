@@ -19,22 +19,10 @@ config = TrainingConfig()
 # 2. load the dataset
 config.dataset_name = "cotF2"
 dataset_dir = "/nfs/rs/psanjay/users/ztushar1/multi-view-cot-retrieval/LES102_MultiView_100m_F2/"
-
-custom_dataset = NasaDataset(root_dir=dataset_dir,ref_scale=False)
-# Create a separate generator for the random split
-split_generator = torch.Generator()
-split_generator.manual_seed(13)  # You can choose any seed value
-
-# Define the sizes for train, validation, and test sets
-total_size = len(custom_dataset)
-test_size = int(0.2 * total_size)
-# Use random_split to split the dataset
-train_data, test_data = random_split(
-    custom_dataset, [total_size - test_size, test_size], generator=split_generator
-)
+train_data = NasaDataset(root_dir=dataset_dir,mode="train",ref_scale=False)
 
 train_dataloader = DataLoader(train_data, batch_size=config.train_batch_size, shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
+# test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
 
 
 # 3. Create a UNet2DModel

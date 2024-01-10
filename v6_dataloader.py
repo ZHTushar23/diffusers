@@ -81,9 +81,9 @@ def _read_csv(path: str):
         return list(csv.DictReader(f))
 
 class NasaDataset(Dataset):
-    def __init__(self, root_dir,transform_cot=None,L=50,ref_scale=True):
+    def __init__(self, root_dir,mode="train",transform_cot=None,L=50,ref_scale=True):
         self.root_dir = root_dir
-        self.csv_file = _read_csv(root_dir+"data_files.csv")
+        self.csv_file = _read_csv(root_dir+mode+".csv")
         # self.filelist = os.listdir(root_dir)
         self.transform1 = T.Compose([T.ToTensor()])
         # self.transform2 = T.Compose([T.ToTensor()]) # define transformation
@@ -154,7 +154,7 @@ if __name__=="__main__":
                 # T.ToTensor(),
                 T.Normalize(mean=[0.6096], std=[1.0741]),
             ])
-    train_data = NasaDataset(root_dir=dataset_dir,ref_scale=False)
+    train_data = NasaDataset(root_dir=dataset_dir,mode="test",ref_scale=False)
     loader = DataLoader(train_data, batch_size=10,shuffle=False)
     print(len(loader.dataset))
     temp= []

@@ -81,6 +81,14 @@ lr_scheduler = get_cosine_schedule_with_warmup(
     num_training_steps=(len(train_dataloader) * config.num_epochs),
 )
 
+# Extract indices from the train_data and test_data
+train_indices = train_data.indices
+test_indices = test_data.indices
+
+# Print or use the indices as needed
+# print("Training set indices:", train_indices)
+print("Test set indices:", test_indices, type(test_indices))
+
 
 # 7. train the model
-train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)
+# train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)

@@ -131,12 +131,12 @@ class NasaDataset(Dataset):
         reflectance = self.transform1(reflectance)
         cot_data    = self.transform1(cot_data)
 
-        # # rescale
-        if self.transform2:
-            cot_data=self.transform2(cot_data)
-            # cot_data=cot_data.repeat(3, 1, 1)
-        else:
-            cot_data = rescale(cot_data,(0, 6), (-1, 1))
+        # # # rescale
+        # if self.transform2:
+        #     cot_data=self.transform2(cot_data)
+        #     # cot_data=cot_data.repeat(3, 1, 1)
+        # else:
+        #     cot_data = rescale(cot_data,(0, 6), (-1, 1))
         reflectance = rescale(reflectance,(0, 2.1272), (-1, 1))
 
         sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context}
@@ -152,7 +152,7 @@ if __name__=="__main__":
                 # T.ToTensor(),
                 T.Normalize(mean=[0.6096], std=[1.0741]),
             ])
-    train_data = NasaDataset(root_dir=dataset_dir,transform_cot=transform)
+    train_data = NasaDataset(root_dir=dataset_dir)
     loader = DataLoader(train_data, batch_size=10,shuffle=False)
     print(len(loader.dataset))
     temp= []
@@ -162,12 +162,12 @@ if __name__=="__main__":
         # get the data
         X, Y, Z = data['reflectance'],data['cot'],data['angles']
         print(Y.shape, X.shape, Z.shape)
-        # print(type(Y))
-        # print(Y.dtype)
-        # print(data.keys())
-        # x,y  = data['input_ids'], data['pixel_values']
-        # print(x.shape)
-        # print(y.shape)
+        # # print(type(Y))
+        # # print(Y.dtype)
+        # # print(data.keys())
+        # # x,y  = data['input_ids'], data['pixel_values']
+        # # print(x.shape)
+        # # print(y.shape)
         break   
     #     x =    data['cot']
     #     temp.append(torch.max(x).item())

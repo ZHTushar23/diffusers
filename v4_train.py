@@ -3,7 +3,7 @@
 # import libraries
 from v4_dataloader import NasaDataset
 import torchvision.transforms as T
-from v4_config import *
+from v5_config import *
 from torch.utils.data import  random_split, DataLoader
 import torch
 import matplotlib.pyplot as plt
@@ -19,13 +19,8 @@ config = TrainingConfig()
 # 2. load the dataset
 config.dataset_name = "cotF2"
 dataset_dir = "/nfs/rs/psanjay/users/ztushar1/multi-view-cot-retrieval/LES102_MultiView_100m_F2/"
-transform = T.Compose([
-            # T.Resize(256),
-            # T.CenterCrop(224),
-            # T.ToTensor(),
-            T.Normalize(mean=[0.6096], std=[1.0741]),
-        ])
-custom_dataset = NasaDataset(root_dir=dataset_dir,transform_cot=transform)
+
+custom_dataset = NasaDataset(root_dir=dataset_dir)
 # Create a separate generator for the random split
 split_generator = torch.Generator()
 split_generator.manual_seed(13)  # You can choose any seed value

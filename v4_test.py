@@ -8,7 +8,7 @@ import torchvision.transforms as T
 
 from diffusion_mini_cond_e2d import DiffusionMiniCondD
 from visualization import *
-from v4_config import TrainingConfig
+from v5_config import TrainingConfig
 from v4_dataloader import NasaDataset,rescale
 import v3_pipeline 
 from feature_extractor import get_features_e2d
@@ -69,7 +69,7 @@ for i in range(len(test_dataloader.dataset)):
 
     # get features using pretrained resnet18 model. 
     cot_context = get_features_e2d(input_image)
-    del input_image
+    # del input_image
     cot_context = cot_context.squeeze()
 
     # ## SAMPLER
@@ -92,7 +92,7 @@ for i in range(len(test_dataloader.dataset)):
 
 
 
-    target_image = rescale(target_image,(-1, 1),(0, 2.1272))
+    # target_image = rescale(target_image,(-1, 1),(0, 2.1272))
     target_image = target_image.numpy()
 
     # # Plot COT
@@ -103,3 +103,9 @@ for i in range(len(test_dataloader.dataset)):
 
     fname = dir_name+"/samples/full_profile_jet_norm_rad066_%01d.png"%(p_num)
     plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
+
+    fname = dir_name+"/samples/full_profile_jet_norm_cot_%01d.png"%(p_num)
+    plot_cot2(cot=input_image[0,0,:,:],title="True COT",fname=fname,use_log=False,limit=[0,7])
+
+    if i==100:
+        break

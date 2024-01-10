@@ -197,8 +197,12 @@ ddpm-rad-72
 ddpm-cot-72
 ddpm-rad-72-cond
 ddpm-rad-72-cond_e2d
+ddpm-rad-72-cond-e2d-2
 ddpm-rad-72-cond2
+ddpm-rad-72-cond-e2d-no-rescale
 v1_ddpm.err
 v1_ddpm.err
 ddpm-cot-72
 model.pth
+v6_ddpm.err
+v6_ddpm.out

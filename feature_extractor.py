@@ -68,6 +68,40 @@ def get_features_e2d(input_image,device="cpu"):
         output_features = model(input_image)
         output_features = m(output_features)
     return output_features
+
+def get_features_e2dCNN(input_image,device="cpu"):
+    saved_model_path = "/home/ztushar1/psanjay_user/COT_CER_Joint_Retrievals/v60_saved_model/e2dCNN/e2d_fold__20231227_111633.pth"
+    # Load pre-trained Encoder2Decoder model
+    model = E2D(n_channels=1,n_dim=32)
+    model.load_state_dict(torch.load(saved_model_path,map_location=torch.device('cpu')))
+    model.to(device)
+
+    # Remove the decoder
+    model = torch.nn.Sequential(*(list(model.children())[:-5]))
+    m = nn.MaxPool2d(9, stride=1)
+    # # Define the layer from which you want to extract features
+    # target_layer = model.down3
+
+    # # Placeholder to store the extracted features
+    # features = None
+
+    # # Define a hook function to be called when forward pass reaches the target layer
+    # def hook(module, input, output):
+    #     global features
+    #     features = output
+
+    # Register the hook to the target layer
+    # hook_handle = target_layer.register_forward_hook(hook)
+    # Set the model to evaluation mode
+    model.eval()
+
+
+    # Forward pass through the ResNet-50 model
+    with torch.no_grad():
+        output_features = model(input_image)
+        output_features = m(output_features)
+    return output_features
+
 if __name__=="__main__":
     original_tensor = torch.randn(1,1, 72, 72)
     output_features=get_features_e2d(original_tensor)

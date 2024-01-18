@@ -397,6 +397,15 @@ class SwitchSequential(nn.Sequential):
                 x = layer(x)
         return x
 
+class SwitchSequentialM(nn.Sequential):
+    def forward(self, x, context):
+        for layer in self:
+            if isinstance(layer, UNET_ResidualBlock):
+                x = layer(x, context)
+            else:
+                x = layer(x)
+        return x
+
 class SwitchSequentialC(nn.Sequential):
     def forward(self, x, x_cond, context, time):
         for layer in self:

@@ -103,21 +103,22 @@ def get_features_e2dCNN(input_image,device="cpu"):
     return output_features
 
 if __name__=="__main__":
-    original_tensor = torch.randn(1,1, 72, 72)
-    output_features=get_features_e2d(original_tensor)
-    # The output_features tensor now contains the extracted features
+    original_tensor = torch.randn(1,3, 72, 72)
+    output_features=get_features(original_tensor)
+    # output_features=get_features_e2d(original_tensor)
+    # # The output_features tensor now contains the extracted features
     print("Shape of the extracted features:", output_features.shape)
     print(original_tensor.dtype)
     print(output_features.dtype)
 
 
 
-    # Assuming you have a tensor of size [1, 512, 1, 1]
-    tensor_to_squeeze = torch.randn(1, 512, 1, 1)
+    # # Assuming you have a tensor of size [1, 512, 1, 1]
+    # tensor_to_squeeze = torch.randn(1, 512, 1, 1)
 
-    # Squeeze the tensor
-    squeezed_tensor = tensor_to_squeeze.squeeze()
+    # # Squeeze the tensor
+    # squeezed_tensor = tensor_to_squeeze.squeeze()
 
-    # Check the size of the squeezed tensor
-    print("Original Tensor Size:", tensor_to_squeeze.size())
-    print("Squeezed Tensor Size:", squeezed_tensor.size())
+    # # Check the size of the squeezed tensor
+    # print("Original Tensor Size:", tensor_to_squeeze.size())
+    # print("Squeezed Tensor Size:", squeezed_tensor.size())

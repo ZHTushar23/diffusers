@@ -61,4 +61,5 @@ if __name__=="__main__":
     print("Number of parameters: {:,}".format(num_params))
     x = torch.rand(1, 1, 72, 72)
     print(model(x).shape)
+    print(model)
     print("Done!")

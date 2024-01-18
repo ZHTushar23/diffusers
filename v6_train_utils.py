@@ -43,15 +43,16 @@ def train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_s
         for step, batch in enumerate(train_dataloader):
             clean_images, angle_context, cot_data = batch["reflectance"],batch["angles"],batch["cot"]
 
-            cot_data = cot_data.to(dtype=torch.float32)
-
+            cot_data = cot_data.to(device='cpu',dtype=torch.float32)
+            clean_images = clean_images.to(dtype=torch.float32)
             # get features using pretrained resnet18 model. 
-            cot_context = get_features_e2d(cot_data,accelerator.device)
+            cot_context = get_features_e2d(cot_data)
             del cot_data
             cot_context = cot_context.squeeze()
+            cot_context = accelerator.prepare(cot_context)
             # print(cot_context.dtype)
             # print(angle_context.dtype)
-            # print(clean_images.dtype)
+            # print("Clean Image: ",clean_images.dtype)
 
             # Sample noise to add to the images
             noise = torch.randn(clean_images.shape, device=clean_images.device)
@@ -64,11 +65,12 @@ def train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_s
             # )
             timesteps = torch.randint(
                 0, noise_scheduler.config.num_train_timesteps, (1,), device=clean_images.device,
-                dtype=torch.int64
+                dtype=torch.int32
             )
             # Add noise to the clean images according to the noise magnitude at each timestep
             # (this is the forward diffusion process)
             noisy_images = noise_scheduler.add_noise(clean_images, noise, timesteps)
+            # print(noisy_images.dtype)
             time_embedding = get_time_embedding(timesteps,accelerator.device)
             # print(time_embedding.device)
             # time_embedding = accelerator.prepare(time_embedding)

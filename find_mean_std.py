@@ -49,10 +49,10 @@ transform = T.Compose([
             # T.Resize(256),
             # T.CenterCrop(224),
             # T.ToTensor(),
-            T.Normalize(mean=[0.6096], std=[1.0741]),
+            T.Normalize(mean=[0.1112], std=[0.1847]),
         ])
 
-train_data = NasaDataset(root_dir=dataset_dir,transform_cot=transform)
+train_data = NasaDataset(root_dir=dataset_dir,mode="train",transform_cot=transform)
 loader = DataLoader(train_data, batch_size=10,shuffle=False)
 mean, std = get_mean_and_std(loader)
 

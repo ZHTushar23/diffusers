@@ -106,7 +106,9 @@ class NasaDataset(Dataset):
 
         # cot profile
         cot_name         = os.path.join(self.root_dir,self.csv_file[idx]['cot'])
+        cot_data         = np.load(cot_name)[:,:,:1]
 
+        p_num = torch.tensor(int(self.csv_file[idx]['Profile']))
 
         # Angle Information
         sza = self.csv_file[idx]['SZA']
@@ -118,8 +120,7 @@ class NasaDataset(Dataset):
         # print(type(sza_temp),sza_temp)
 
         # batch size, 72,72,2
-        cot_data         = np.load(cot_name)[:,:,:1]
-        cot_data         = np.log(cot_data+1)
+
         # # Cloud Mask
         # cmask            = np.load(cot_name)[:,:,:1]
       
@@ -127,6 +128,7 @@ class NasaDataset(Dataset):
         sza_emb = self.embed(sza_temp)
         vza_emb = self.embed(vza_temp)
         context = torch.concat((sza_emb.unsqueeze(0),vza_emb.unsqueeze(0)),dim=0)
+        # context = torch.concat((sza_emb,vza_emb),dim=0)
 
         # Convert to tensor
         reflectance = self.transform1(reflectance)
@@ -141,7 +143,7 @@ class NasaDataset(Dataset):
         if self.ref_scale:
             reflectance = rescale(reflectance,(0, 2.1272), (-1, 1))
 
-        sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context}
+        sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context,"sza":sza_temp,"vza":vza_temp,"p_num":p_num }
         return sample
 
 
@@ -154,7 +156,7 @@ if __name__=="__main__":
                 # T.ToTensor(),
                 T.Normalize(mean=[0.6096], std=[1.0741]),
             ])
-    train_data = NasaDataset(root_dir=dataset_dir,mode="test",ref_scale=False)
+    train_data = NasaDataset(root_dir=dataset_dir,mode="train",ref_scale=False)
     loader = DataLoader(train_data, batch_size=10,shuffle=False)
     print(len(loader.dataset))
     temp= []
@@ -162,19 +164,24 @@ if __name__=="__main__":
     for i in range(len(loader.dataset)):
         data = loader.dataset[i]
         # # get the data
-        # X, Y, Z = data['reflectance'],data['cot'],data['angles']
-        # print(Y.shape, X.shape, Z.shape)
+        X, Y, Z,p_num = data['reflectance'],data['cot'],data['angles'],data["p_num"]
+        print(Y.shape, X.shape, Z.shape)
+        print(p_num, type(p_num))
         # # # print(type(Y))
         # # # print(Y.dtype)
         # # # print(data.keys())
         # # # x,y  = data['input_ids'], data['pixel_values']
         # # # print(x.shape)
         # # # print(y.shape)
-        # break   
-        x =    data['reflectance']
-        temp.append(torch.max(x).item())
-        temp1.append(torch.min(x).item())
-    print(np.max(temp),np.min(temp1))
+        break  
+        
+    for _, data in enumerate(loader):
+        print(type(data))
+        break
+    #     x =    data['reflectance']
+    #     temp.append(torch.max(x).item())
+    #     temp1.append(torch.min(x).item())
+    # print(np.max(temp),np.min(temp1))
 
 
     # Assuming you have a tensor of size torch.Size([1, 72, 72])

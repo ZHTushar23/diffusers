@@ -81,13 +81,14 @@ def _read_csv(path: str):
         return list(csv.DictReader(f))
 
 class NasaDataset(Dataset):
-    def __init__(self, root_dir,transform_cot=None,L=50):
+    def __init__(self, root_dir,mode="train",transform_cot=None,L=50):
         self.root_dir = root_dir
-        self.csv_file = _read_csv(root_dir+"data_files.csv")
+        self.csv_file = _read_csv(root_dir+mode+".csv")
         # self.filelist = os.listdir(root_dir)
         self.transform1 = T.Compose([T.ToTensor()])
         # self.transform2 = T.Compose([T.ToTensor()]) # define transformation
         self.embed, _ = get_embedder(L)
+        self.transform2 =None
         if transform_cot:
             self.transform2=transform_cot
     
@@ -130,13 +131,13 @@ class NasaDataset(Dataset):
         # Convert to tensor
         reflectance = self.transform1(reflectance)
         cot_data    = self.transform1(cot_data)
+        # rescale
+        cot_data = rescale(cot_data,(0, 6), (0, 1))
 
-        # # rescale
         if self.transform2:
             cot_data=self.transform2(cot_data)
             cot_data=cot_data.repeat(3, 1, 1)
-        else:
-            cot_data = rescale(cot_data,(0, 6), (-1, 1))
+            
         reflectance = rescale(reflectance,(0, 2.1272), (-1, 1))
 
         sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context}
@@ -150,29 +151,30 @@ if __name__=="__main__":
                 # T.Resize(256),
                 # T.CenterCrop(224),
                 # T.ToTensor(),
-                T.Normalize(mean=[0.6096], std=[1.0741]),
+                # T.Normalize(mean=[0.1016], std=[0.1790]
+                T.Normalize(mean=[0.1112], std=[0.1847]),
             ])
-    train_data = NasaDataset(root_dir=dataset_dir,transform_cot=transform)
+    train_data = NasaDataset(root_dir=dataset_dir,transform_cot=None)
     loader = DataLoader(train_data, batch_size=10,shuffle=False)
     print(len(loader.dataset))
     temp= []
     temp1= []
     for i in range(len(loader.dataset)):
         data = loader.dataset[i]
-        # get the data
-        X, Y, Z = data['reflectance'],data['cot'],data['angles']
-        print(Y.shape, X.shape, Z.shape)
-        # print(type(Y))
-        # print(Y.dtype)
-        # print(data.keys())
-        # x,y  = data['input_ids'], data['pixel_values']
-        # print(x.shape)
-        # print(y.shape)
-        break   
-    #     x =    data['cot']
-    #     temp.append(torch.max(x).item())
-    #     temp1.append(torch.min(x).item())
-    # print(np.max(temp),np.min(temp1))
+        # # get the data
+        # X, Y, Z = data['reflectance'],data['cot'],data['angles']
+        # print(Y.shape, X.shape, Z.shape)
+        # # print(type(Y))
+        # # print(Y.dtype)
+        # # print(data.keys())
+        # # x,y  = data['input_ids'], data['pixel_values']
+        # # print(x.shape)
+        # # print(y.shape)
+        # break   
+        x =    data['cot']
+        temp.append(torch.max(x).item())
+        temp1.append(torch.min(x).item())
+    print(np.max(temp),np.min(temp1))
 
 
     # Assuming you have a tensor of size torch.Size([1, 72, 72])

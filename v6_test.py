@@ -28,33 +28,19 @@ noise_scheduler = DDPMScheduler(num_train_timesteps=1000)
 model = DiffusionMiniCondD(in_channels=1,interim_channels=32,out_channels=1)
 model_saved_path = os.path.join(config.output_dir,"model.pth")
 # print(model_saved_path)
-model.load_state_dict(torch.load(model_saved_path,map_location=torch.device('cpu')))
+# model.load_state_dict(torch.load(model_saved_path,map_location=torch.device('cpu')))
 
 # 3. load test dataset 
 config.dataset_name = "cotF2"
 dataset_dir = "/nfs/rs/psanjay/users/ztushar1/multi-view-cot-retrieval/LES102_MultiView_100m_F2/"
-transform = T.Compose([
-            # T.Resize(256),
-            # T.CenterCrop(224),
-            # T.ToTensor(),
-            T.Normalize(mean=[0.6096], std=[1.0741]),
-        ])
-custom_dataset = NasaDataset(root_dir=dataset_dir,ref_scale=False)
-# Create a separate generator for the random split
-split_generator = torch.Generator()
-split_generator.manual_seed(13)  # You can choose any seed value
-
-# Define the sizes for train, validation, and test sets
-total_size = len(custom_dataset)
-test_size = int(0.2 * total_size)
-# Use random_split to split the dataset
-_, test_data = random_split(
-    custom_dataset, [total_size - test_size, test_size], generator=split_generator
-)
-
+test_data = NasaDataset(root_dir=dataset_dir,mode="test",ref_scale=False)
 test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
-
-
+dir_name = config.output_dir+"/samples"
+try:
+    os.makedirs(dir_name)
+except FileExistsError:
+    print("folder already exists")
+mse_loss = []
 for i in range(len(test_dataloader.dataset)):
     data = test_dataloader.dataset[i]
     p_num =  i
@@ -97,15 +83,18 @@ for i in range(len(test_dataloader.dataset)):
 
     # # Plot COT
     # p_num=100
-    dir_name = config.output_dir
-    fname = dir_name+"/samples/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
+
+    fname = dir_name+"/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
     plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-    fname = dir_name+"/samples/full_profile_jet_norm_rad066_%01d.png"%(p_num)
+    fname = dir_name+"/full_profile_jet_norm_rad066_%01d.png"%(p_num)
     plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-    fname = dir_name+"/samples/full_profile_jet_norm_cot_%01d.png"%(p_num)
+    fname = dir_name+"/full_profile_jet_norm_cot_%01d.png"%(p_num)
     plot_cot2(cot=input_image[0,0,:,:],title="True COT",fname=fname,use_log=False,limit=[0,7])
 
+    mse_loss.append(np.average((target_image[0,:,:]-output_image[:,:,0])**2))
     if i==100:
         break
+
+print("Avergae MSE: ", np.average(mse_loss))    

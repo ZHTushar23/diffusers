@@ -23,23 +23,11 @@ transform = T.Compose([
             # T.Resize(256),
             # T.CenterCrop(224),
             # T.ToTensor(),
-            T.Normalize(mean=[0.6096], std=[1.0741]),
+            T.Normalize(mean=[0.1112], std=[0.1847]),
         ])
-custom_dataset = NasaDataset(root_dir=dataset_dir,transform_cot=transform)
-# Create a separate generator for the random split
-split_generator = torch.Generator()
-split_generator.manual_seed(13)  # You can choose any seed value
-
-# Define the sizes for train, validation, and test sets
-total_size = len(custom_dataset)
-test_size = int(0.2 * total_size)
-# Use random_split to split the dataset
-train_data, test_data = random_split(
-    custom_dataset, [total_size - test_size, test_size], generator=split_generator
-)
+train_data = NasaDataset(root_dir=dataset_dir,mode="train",transform_cot=transform)
 
 train_dataloader = DataLoader(train_data, batch_size=config.train_batch_size, shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
 
 
 # 3. Create a UNet2DModel

@@ -3,12 +3,12 @@
 # import libraries
 from v4_dataloader import NasaDataset
 import torchvision.transforms as T
-from v5_config import *
+from v4_config import *
 from torch.utils.data import  random_split, DataLoader
 import torch
 import matplotlib.pyplot as plt
 # from diffusers import UNet2DModel
-from diffusion_mini_cond_e2d import DiffusionMiniCondD
+from diffusion_mini_cond_dummy import DiffusionMiniCondD
 from v3_train_utils import train_loop
 import os
 local_rank = int(os.environ["LOCAL_RANK"])
@@ -19,22 +19,15 @@ config = TrainingConfig()
 # 2. load the dataset
 config.dataset_name = "cotF2"
 dataset_dir = "/nfs/rs/psanjay/users/ztushar1/multi-view-cot-retrieval/LES102_MultiView_100m_F2/"
-
-custom_dataset = NasaDataset(root_dir=dataset_dir)
-# Create a separate generator for the random split
-split_generator = torch.Generator()
-split_generator.manual_seed(13)  # You can choose any seed value
-
-# Define the sizes for train, validation, and test sets
-total_size = len(custom_dataset)
-test_size = int(0.2 * total_size)
-# Use random_split to split the dataset
-train_data, test_data = random_split(
-    custom_dataset, [total_size - test_size, test_size], generator=split_generator
-)
+transform = T.Compose([
+            # T.Resize(256),
+            # T.CenterCrop(224),
+            # T.ToTensor(),
+            T.Normalize(mean=[0.1112], std=[0.1847]),
+        ])
+train_data = NasaDataset(root_dir=dataset_dir,mode="train",transform_cot=transform)
 
 train_dataloader = DataLoader(train_data, batch_size=config.train_batch_size, shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
 
 
 # 3. Create a UNet2DModel
@@ -81,14 +74,6 @@ lr_scheduler = get_cosine_schedule_with_warmup(
     num_training_steps=(len(train_dataloader) * config.num_epochs),
 )
 
-# Extract indices from the train_data and test_data
-train_indices = train_data.indices
-test_indices = test_data.indices
-
-# Print or use the indices as needed
-# print("Training set indices:", train_indices)
-print("Test set indices:", test_indices, type(test_indices))
-
 
 # 7. train the model
-# train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)
+train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)

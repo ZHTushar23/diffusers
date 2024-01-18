@@ -6,12 +6,12 @@ import torch
 from torch.utils.data import random_split, DataLoader
 import torchvision.transforms as T
 
-from diffusion_mini_cond_e2d import DiffusionMiniCondD
+from diffusion_mini_cond_dummy import DiffusionMiniCondD
 from visualization import *
-from v5_config import TrainingConfig
+from v4_config import TrainingConfig
 from v4_dataloader import NasaDataset,rescale
 import v3_pipeline 
-from feature_extractor import get_features_e2d
+from feature_extractor import get_features
 from visualization import *
 
 DEVICE="cpu"
@@ -22,13 +22,13 @@ if torch.cuda.is_available():
 config = TrainingConfig()
 
 # 1. load noise scheduler. It generates and removes noise. 
-noise_scheduler = DDPMScheduler(num_train_timesteps=1000)
+noise_scheduler = DDPMScheduler(num_train_timesteps=100)
 
 # 2. load model
 model = DiffusionMiniCondD(in_channels=1,interim_channels=32,out_channels=1)
-model_saved_path = os.path.join(config.output_dir,"model.pth")
+# model_saved_path = os.path.join(config.output_dir,"model.pth")
 # print(model_saved_path)
-model.load_state_dict(torch.load(model_saved_path,map_location=torch.device('cpu')))
+# model.load_state_dict(torch.load(model_saved_path,map_location=torch.device('cpu')))
 
 # 3. load test dataset 
 config.dataset_name = "cotF2"
@@ -37,23 +37,17 @@ transform = T.Compose([
             # T.Resize(256),
             # T.CenterCrop(224),
             # T.ToTensor(),
-            T.Normalize(mean=[0.6096], std=[1.0741]),
+            T.Normalize(mean=[0.1112], std=[0.1847]),
         ])
-custom_dataset = NasaDataset(root_dir=dataset_dir,transform_cot=transform)
-# Create a separate generator for the random split
-split_generator = torch.Generator()
-split_generator.manual_seed(13)  # You can choose any seed value
-
-# Define the sizes for train, validation, and test sets
-total_size = len(custom_dataset)
-test_size = int(0.2 * total_size)
-# Use random_split to split the dataset
-_, test_data = random_split(
-    custom_dataset, [total_size - test_size, test_size], generator=split_generator
-)
-
+test_data = NasaDataset(root_dir=dataset_dir,mode="train",transform_cot=transform)
 test_dataloader = DataLoader(test_data, batch_size=1, shuffle=False)
 
+mse_loss = []
+dir_name = config.output_dir+"/samples"
+try:
+    os.makedirs(dir_name)
+except FileExistsError:
+    print("folder already exists")
 
 for i in range(len(test_dataloader.dataset)):
     data = test_dataloader.dataset[i]
@@ -68,7 +62,7 @@ for i in range(len(test_dataloader.dataset)):
     input_image= input_image.to(dtype=torch.float32)
 
     # get features using pretrained resnet18 model. 
-    cot_context = get_features_e2d(input_image)
+    cot_context = get_features(input_image)
     # del input_image
     cot_context = cot_context.squeeze()
 
@@ -88,24 +82,23 @@ for i in range(len(test_dataloader.dataset)):
     )
     print(output_image.shape)
     # Combine the input image and the output image into a single image.
-    np.save(config.output_dir+"/samples/rad066.npy",output_image)
-
-
-
     # target_image = rescale(target_image,(-1, 1),(0, 2.1272))
     target_image = target_image.numpy()
 
     # # Plot COT
     # p_num=100
-    dir_name = config.output_dir
-    fname = dir_name+"/samples/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
+    
+    fname = dir_name+"/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
     plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-    fname = dir_name+"/samples/full_profile_jet_norm_rad066_%01d.png"%(p_num)
+    fname = dir_name+"/full_profile_jet_norm_rad066_%01d.png"%(p_num)
     plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-    fname = dir_name+"/samples/full_profile_jet_norm_cot_%01d.png"%(p_num)
+    fname = dir_name+"/full_profile_jet_norm_cot_%01d.png"%(p_num)
     plot_cot2(cot=input_image[0,0,:,:],title="True COT",fname=fname,use_log=False,limit=[0,7])
 
-    if i==100:
+    mse_loss.append(np.average((target_image[0,:,:]-output_image[:,:,0])**2))
+    if i==1:
         break
+
+print("Avergae MSE: ", np.average(mse_loss))    

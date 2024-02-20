@@ -59,7 +59,7 @@ def generate(
 
     timesteps = tqdm(sampler.timesteps)
     for i, timestep in enumerate(timesteps):
-        print("Timestep: ", i)
+        # print("Timestep: ", i)
         # (1, 320)
         time_embedding = get_time_embedding(timestep).to(device)
         # print(time_embedding.shape)

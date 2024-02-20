@@ -143,7 +143,8 @@ class NasaDataset(Dataset):
         if self.ref_scale:
             reflectance = rescale(reflectance,(0, 2.1272), (-1, 1))
 
-        sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context,"sza":sza_temp,"vza":vza_temp,"p_num":p_num }
+        sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context,
+                  "sza":sza_temp,"vza":vza_temp,"p_num":p_num, "name":self.csv_file[idx]['cot'].split('/')[2].split('.')[0] }
         return sample
 
 
@@ -164,9 +165,10 @@ if __name__=="__main__":
     for i in range(len(loader.dataset)):
         data = loader.dataset[i]
         # # get the data
-        X, Y, Z,p_num = data['reflectance'],data['cot'],data['angles'],data["p_num"]
+        X, Y, Z,p_num ,nn= data['reflectance'],data['cot'],data['angles'],data["p_num"],data["name"]
         print(Y.shape, X.shape, Z.shape)
         print(p_num, type(p_num))
+        print(nn,type(nn))
         # # # print(type(Y))
         # # # print(Y.dtype)
         # # # print(data.keys())
@@ -174,7 +176,6 @@ if __name__=="__main__":
         # # # print(x.shape)
         # # # print(y.shape)
         break  
-        
     for _, data in enumerate(loader):
         print(type(data))
         break

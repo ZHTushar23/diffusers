@@ -16,7 +16,7 @@ class TrainingConfig:
     save_image_epochs = 1
     save_model_epochs = 1
     mixed_precision = "no"  # `no` for float32, `fp16` for automatic mixed precision
-    output_dir = "ddpm-rad-72-cond-e2d-no-rescale"  # the model name locally and on the HF Hub
+    output_dir = "v6-ddpm-rad-72-cond-e2d-no-rescale"  # the model name locally and on the HF Hub
 
     push_to_hub = False  # whether to upload the saved model to the HF Hub
     hub_model_id = "<your-username>/<my-awesome-model>"  # the name of the repository to create on the HF Hub

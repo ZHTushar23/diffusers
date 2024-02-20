@@ -106,7 +106,7 @@ class NasaDataset(Dataset):
 
         # cot profile
         cot_name         = os.path.join(self.root_dir,self.csv_file[idx]['cot'])
-
+        p_num = torch.tensor(int(self.csv_file[idx]['Profile']))
 
         # Angle Information
         sza = self.csv_file[idx]['SZA']
@@ -140,7 +140,8 @@ class NasaDataset(Dataset):
             
         reflectance = rescale(reflectance,(0, 2.1272), (-1, 1))
 
-        sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context}
+        sample = {'reflectance': reflectance, 'cot': cot_data,'angles':context,
+                  "sza":sza_temp,"vza":vza_temp,"p_num":p_num, "name":self.csv_file[idx]['cot'].split('/')[2].split('.')[0]}
         return sample
 
 

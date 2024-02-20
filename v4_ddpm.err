@@ -1,0 +1,232 @@
+[2024-01-17 21:38:40,269] torch.distributed.run: [WARNING] master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+[2024-01-17 21:38:40,269] torch.distributed.run: [WARNING] 
+[2024-01-17 21:38:40,269] torch.distributed.run: [WARNING] *****************************************
+[2024-01-17 21:38:40,269] torch.distributed.run: [WARNING] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+[2024-01-17 21:38:40,269] torch.distributed.run: [WARNING] *****************************************
+/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/accelerator.py:384: UserWarning: `log_with=tensorboard` was passed but no supported trackers are currently installed.
+  warnings.warn(f"`log_with={log_with}` was passed but no supported trackers are currently installed.")
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/accelerator.py:384: UserWarning: `log_with=tensorboard` was passed but no supported trackers are currently installed.
+  warnings.warn(f"`log_with={log_with}` was passed but no supported trackers are currently installed.")
+/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/accelerator.py:384: UserWarning: `log_with=tensorboard` was passed but no supported trackers are currently installed.
+  warnings.warn(f"`log_with={log_with}` was passed but no supported trackers are currently installed.")
+/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/accelerator.py:384: UserWarning: `log_with=tensorboard` was passed but no supported trackers are currently installed.
+  warnings.warn(f"`log_with={log_with}` was passed but no supported trackers are currently installed.")
+  0%|          | 0/252 [00:00<?, ?it/s]Epoch 0:   0%|          | 0/252 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v4_train.py", line 79, in <module>
+    train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v3_train_utils.py", line 79, in train_loop
+    noise_pred = model(noisy_images,cot_context,angle_context,time_embedding)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1519, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1355, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 659, in forward
+    return model_forward(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 647, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/amp/autocast_mode.py", line 16, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 152, in forward
+    output = self.unet(latent, cond_latent, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 124, in forward
+    x = layers(x, x_cond, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_unet_parts.py", line 421, in forward
+    x = layer(x)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Input type (double) and bias type (c10::Half) should be the same
+Epoch 0:   0%|          | 0/252 [00:07<?, ?it/s]
+Traceback (most recent call last):
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v4_train.py", line 79, in <module>
+    train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v3_train_utils.py", line 79, in train_loop
+    noise_pred = model(noisy_images,cot_context,angle_context,time_embedding)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1519, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1355, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 659, in forward
+    return model_forward(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 647, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/amp/autocast_mode.py", line 16, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 152, in forward
+    output = self.unet(latent, cond_latent, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 124, in forward
+    x = layers(x, x_cond, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_unet_parts.py", line 421, in forward
+    x = layer(x)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Input type (double) and bias type (c10::Half) should be the same
+Traceback (most recent call last):
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v4_train.py", line 79, in <module>
+    train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v3_train_utils.py", line 79, in train_loop
+    noise_pred = model(noisy_images,cot_context,angle_context,time_embedding)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1519, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1355, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 659, in forward
+    return model_forward(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 647, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/amp/autocast_mode.py", line 16, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 152, in forward
+    output = self.unet(latent, cond_latent, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 124, in forward
+    x = layers(x, x_cond, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_unet_parts.py", line 421, in forward
+    x = layer(x)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Input type (double) and bias type (c10::Half) should be the same
+Traceback (most recent call last):
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v4_train.py", line 79, in <module>
+    train_loop(config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/v3_train_utils.py", line 79, in train_loop
+    noise_pred = model(noisy_images,cot_context,angle_context,time_embedding)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1519, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/parallel/distributed.py", line 1355, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 659, in forward
+    return model_forward(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/accelerate/utils/operations.py", line 647, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/amp/autocast_mode.py", line 16, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 152, in forward
+    output = self.unet(latent, cond_latent, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_mini_cond_dummy.py", line 124, in forward
+    x = layers(x, x_cond, context, time)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/rs/psanjay/users/ztushar1/diffusers/diffusion_unet_parts.py", line 421, in forward
+    x = layer(x)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 460, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 456, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Input type (double) and bias type (c10::Half) should be the same
+[2024-01-17 21:39:10,504] torch.distributed.elastic.multiprocessing.api: [WARNING] Sending process 83889 closing signal SIGTERM
+[2024-01-17 21:39:10,505] torch.distributed.elastic.multiprocessing.api: [WARNING] Sending process 83890 closing signal SIGTERM
+[2024-01-17 21:39:10,505] torch.distributed.elastic.multiprocessing.api: [WARNING] Sending process 83893 closing signal SIGTERM
+[2024-01-17 21:39:10,886] torch.distributed.elastic.multiprocessing.api: [ERROR] failed (exitcode: 1) local_rank: 0 (pid: 83888) of binary: /home/ztushar1/.conda/envs/df/bin/python
+Traceback (most recent call last):
+  File "/home/ztushar1/.conda/envs/df/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/distributed/run.py", line 806, in main
+    run(args)
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/distributed/run.py", line 797, in run
+    elastic_launch(
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/ztushar1/.conda/envs/df/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+v4_train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2024-01-17_21:39:10
+  host      : g13.cm.cluster
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 83888)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

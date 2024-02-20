@@ -51,10 +51,12 @@ except FileExistsError:
 
 for i in range(len(test_dataloader.dataset)):
     data = test_dataloader.dataset[i]
-    p_num =  i
+
     # get the data
-    target_image, input_image, context = data['reflectance'],data['cot'],data['angles']
+    target_image, input_image, context,sza,vza,nn = data['reflectance'],data['cot'],data['angles'],data['sza'],data['vza'],data['name']
     # break
+    sza = sza.numpy()
+    vza = vza.numpy()
 
     input_image = torch.unsqueeze(input_image,0)
     context = torch.unsqueeze(context,0)
@@ -88,13 +90,13 @@ for i in range(len(test_dataloader.dataset)):
     # # Plot COT
     # p_num=100
     
-    fname = dir_name+"/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
+    fname = dir_name+"/rad066_pred_"+nn+"_SZA_%02d_VZA_%02d.png"%(sza,vza)
     plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-    fname = dir_name+"/full_profile_jet_norm_rad066_%01d.png"%(p_num)
+    fname = dir_name+"/rad066_"+nn+"_SZA_%02d_VZA_%02d.png"%(sza,vza)
     plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-    fname = dir_name+"/full_profile_jet_norm_cot_%01d.png"%(p_num)
+    fname = dir_name+"/cot_"+nn+"_SZA_%02d_VZA_%02d.png"%(sza,vza)
     plot_cot2(cot=input_image[0,0,:,:],title="True COT",fname=fname,use_log=False,limit=[0,7])
 
     mse_loss.append(np.average((target_image[0,:,:]-output_image[:,:,0])**2))

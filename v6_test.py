@@ -28,7 +28,7 @@ noise_scheduler = DDPMScheduler(num_train_timesteps=1000)
 model = DiffusionMiniCondD(in_channels=1,interim_channels=32,out_channels=1)
 model_saved_path = os.path.join(config.output_dir,"model.pth")
 # print(model_saved_path)
-# model.load_state_dict(torch.load(model_saved_path,map_location=torch.device('cpu')))
+model.load_state_dict(torch.load(model_saved_path,map_location=torch.device('cpu')))
 
 # 3. load test dataset 
 config.dataset_name = "cotF2"
@@ -41,12 +41,17 @@ try:
 except FileExistsError:
     print("folder already exists")
 mse_loss = []
+
 for i in range(len(test_dataloader.dataset)):
     data = test_dataloader.dataset[i]
-    p_num =  i
+    # p_num =  i
     # get the data
-    target_image, input_image, context = data['reflectance'],data['cot'],data['angles']
-    # break
+    target_image, input_image, context,sza,vza,nn = data['reflectance'],data['cot'],data['angles'],data['sza'],data['vza'],data['name']
+    
+    sza = sza.numpy()
+    vza = vza.numpy()
+
+
 
     input_image = torch.unsqueeze(input_image,0)
     context = torch.unsqueeze(context,0)
@@ -60,7 +65,7 @@ for i in range(len(test_dataloader.dataset)):
 
     # ## SAMPLER
     sampler = "ddpm"
-    num_inference_steps = 1000
+    num_inference_steps = 100
     seed = 42
 
     output_image = v3_pipeline.generate(
@@ -81,20 +86,19 @@ for i in range(len(test_dataloader.dataset)):
     # target_image = rescale(target_image,(-1, 1),(0, 2.1272))
     target_image = target_image.numpy()
 
-    # # Plot COT
-    # p_num=100
 
-    fname = dir_name+"/full_profile_jet_norm_rad066_pred_%01d.png"%(p_num)
-    plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
 
-    fname = dir_name+"/full_profile_jet_norm_rad066_%01d.png"%(p_num)
-    plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,2])
+    fname = dir_name+"/rad066_pred_"+nn+"_SZA_%02d_VZA_%02d.png"%(sza,vza)
+    plot_cot2(cot=output_image[:,:,0],title="Pred Radiance 0.66um",fname=fname,use_log=False,limit=[0,6])
 
-    fname = dir_name+"/full_profile_jet_norm_cot_%01d.png"%(p_num)
+    fname = dir_name+"/rad066_"+nn+"_SZA_%02d_VZA_%02d.png"%(sza,vza)
+    plot_cot2(cot=target_image[0,:,:],title="True Radiance 0.66um",fname=fname,use_log=False,limit=[0,6])
+
+    fname = dir_name+"/cot_"+nn+"_SZA_%02d_VZA_%02d.png"%(sza,vza)
     plot_cot2(cot=input_image[0,0,:,:],title="True COT",fname=fname,use_log=False,limit=[0,7])
 
     mse_loss.append(np.average((target_image[0,:,:]-output_image[:,:,0])**2))
-    if i==100:
+    if i==20:
         break
 
 print("Avergae MSE: ", np.average(mse_loss))    
